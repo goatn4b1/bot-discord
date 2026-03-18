@@ -19,11 +19,15 @@ module.exports = {
         if (oldState.channel && !newState.channel) {
 
             const channel = oldState.channel;
+            try{
+                await channel.send({
+                    content: `${member} đã rời khỏi **${channel.name}**`,
+                    allowedMentions: { users: [member.id] }
+                });
+            }catch{
 
-            await channel.send({
-                content: `${member} đã rời khỏi **${channel.name}**`,
-                allowedMentions: { users: [member.id] }
-            });
+            }
+            
         }
 
     }
