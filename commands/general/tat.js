@@ -1,10 +1,13 @@
 const { EmbedBuilder } = require("discord.js");
 
+const HIEU_78_ID = "1368902440794980433";
+const QUANG_SON_ID = "1449721259712577699";
+const SPECIAL_REDIRECT_TARGET_ID = "1276528152679809116";
+
 module.exports = {
     name: "tat",
 
-    async execute(message, args) {
-
+    async execute(message) {
         const member = message.mentions.members.first();
 
         if (!member) {
@@ -32,9 +35,7 @@ module.exports = {
             });
         }
 
-         // nếu tát người cấm tát
         if (member.id === "763409750947135498") {
-
             const embed = new EmbedBuilder()
                 .setColor("#ff0000")
                 .setDescription(`**${message.author}** phải đi tù!`)
@@ -56,10 +57,10 @@ module.exports = {
         let text = `👋 **${message.author}** đã tát **${member}**`;
         let footer = "Đưa con mẹ mày tiền đây";
 
-        if (member.id === "1276528152679809116") {
+        if (member.id === SPECIAL_REDIRECT_TARGET_ID) {
             image = "tathieu78.jpg";
             text = `**${message.author}** vừa định tát **${member}**!`;
-            footer = "Không được đâu Herina oi";
+            footer = "Không được đâu Herina ơi";
         }
 
         const embed = new EmbedBuilder()
@@ -78,18 +79,31 @@ module.exports = {
             ]
         });
 
-        // nếu bị tát là user đặc biệt -> tát hiếu78
-        if (member.id === "1276528152679809116") {
-            const hieuId = "1368902440794980433";
-
-            const embed2 = new EmbedBuilder()
+        if (member.id === SPECIAL_REDIRECT_TARGET_ID) {
+            const hieuEmbed = new EmbedBuilder()
                 .setColor("#ff0000")
-                .setDescription(`💥 <@${hieuId}> đã bị tát`)
+                .setDescription(`💥 <@${HIEU_78_ID}> đã bị tát`)
                 .setImage("attachment://tat.jpg")
-                .setFooter({ text: "Hiếu 78 ơi mày phải bị ăn tát!" });
+                .setFooter({ text: "Hiếu 78 ơi, mày phải bị ăn tát!" });
 
             await message.channel.send({
-                embeds: [embed2],
+                embeds: [hieuEmbed],
+                files: [
+                    {
+                        attachment: "./public/images/tat.jpg",
+                        name: "tat.jpg"
+                    }
+                ]
+            });
+
+            const quangSonEmbed = new EmbedBuilder()
+                .setColor("#3d8fd1")
+                .setDescription(`💥 <@${QUANG_SON_ID}> đã bị tát`)
+                .setImage("attachment://tat.jpg")
+                .setFooter({ text: "Quang Sơn ơi, mày cũng dính rồi!" });
+
+            await message.channel.send({
+                embeds: [quangSonEmbed],
                 files: [
                     {
                         attachment: "./public/images/tat.jpg",
@@ -98,6 +112,5 @@ module.exports = {
                 ]
             });
         }
-
     }
 };

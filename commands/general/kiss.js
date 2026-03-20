@@ -1,24 +1,24 @@
 const { EmbedBuilder } = require("discord.js");
 
+const HIEU_78_ID = "1368902440794980433";
+const QUANG_SON_ID = "1449721259712577699";
+
 module.exports = {
     name: "kiss",
 
-    async execute(message, args) {
-
+    async execute(message) {
         const member = message.mentions.members.first();
 
         if (!member) {
             return message.reply("❌ Bạn phải tag người muốn kiss.");
         }
 
-        if (
-            message.author.id === "1368902440794980433"
-        ) {
+        if (message.author.id === HIEU_78_ID) {
             const embed = new EmbedBuilder()
                 .setColor("#d1853d")
                 .setDescription(`Chạy đi **${message.author}** kìa`)
                 .setImage("attachment://chaydi.jpg")
-                .setFooter({ text: "Ấm dâu hiếu78" });
+                .setFooter({ text: "Ấm dâu Hiếu 78" });
 
             return message.channel.send({
                 embeds: [embed],
@@ -31,9 +31,25 @@ module.exports = {
             });
         }
 
-         // nếu tát người cấm tát
-        if (member.id === "763409750947135498") {
+        if (message.author.id === QUANG_SON_ID) {
+            const embed = new EmbedBuilder()
+                .setColor("#3d8fd1")
+                .setDescription(`Chạy đi **${message.author}** kìa`)
+                .setImage("attachment://chaydi.jpg")
+                .setFooter({ text: "Ấm dâu Quang Sơn" });
 
+            return message.channel.send({
+                embeds: [embed],
+                files: [
+                    {
+                        attachment: "./public/images/chaydi.jpg",
+                        name: "chaydi.jpg"
+                    }
+                ]
+            });
+        }
+
+        if (member.id === "763409750947135498") {
             const embed = new EmbedBuilder()
                 .setColor("#ff0000")
                 .setDescription(`**${message.author}** phải đi tù!`)
@@ -51,25 +67,20 @@ module.exports = {
             });
         }
 
-        let image = "kiss.jpg";
-        let text = `**${message.author}** đã kiss **${member}**`;
-        let footer = "Trao nhau nụ hôn nồng cháy";
-
         const embed = new EmbedBuilder()
             .setColor("#ff4d6d")
-            .setDescription(text)
-            .setImage(`attachment://${image}`)
-            .setFooter({ text: footer });
+            .setDescription(`**${message.author}** đã kiss **${member}**`)
+            .setImage("attachment://kiss.jpg")
+            .setFooter({ text: "Trao nhau nụ hôn nồng cháy" });
 
-        await message.channel.send({
+        return message.channel.send({
             embeds: [embed],
             files: [
                 {
-                    attachment: `./public/images/${image}`,
-                    name: image
+                    attachment: "./public/images/kiss.jpg",
+                    name: "kiss.jpg"
                 }
             ]
         });
-
     }
 };
