@@ -2,33 +2,32 @@ module.exports = {
     name: "voiceStateUpdate",
 
     async execute(oldState, newState) {
-
         const member = newState.member || oldState.member;
+        const channel = newState.channel || oldState.channel;
 
-        // JOIN
-        if (!oldState.channel && newState.channel) {
-
-            const channel = newState.channel;
-
-            await channel.send({
-                content: `${member} đã tham gia **${channel.name}**`
-            });
+        if (!member || member.user?.bot || !channel || typeof channel.send !== "function") {
+            return;
         }
 
-        // LEAVE
-        if (oldState.channel && !newState.channel) {
+        if (!oldState.channel && newState.channel) {
+            try {
+                await channel.send({
+                    content: `${member} đã tham gia **${channel.name}**`
+                });
+            } catch {
 
-            const channel = oldState.channel;
-            try{
+            }
+        }
+
+        if (oldState.channel && !newState.channel) {
+            try {
                 await channel.send({
                     content: `${member} đã rời khỏi **${channel.name}**`,
                     allowedMentions: { users: [member.id] }
                 });
-            }catch{
+            } catch {
 
             }
-            
         }
-
     }
 };

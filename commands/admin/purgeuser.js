@@ -86,7 +86,7 @@ module.exports = {
     name: "purgeuser",
 
     async execute(message, args) {
-        return message.reply("Tính năng này hiện đang bảo trì, vui lòng thử lại sau.");
+        // return message.reply("Tính năng này hiện đang bảo trì, vui lòng thử lại sau.");
 
         if (!message.guild) {
             return message.reply("Lệnh này chỉ dùng được trong server.");
