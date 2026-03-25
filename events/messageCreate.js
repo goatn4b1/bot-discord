@@ -1,5 +1,6 @@
 const keywordHandler = require("../handlers/keywordHandler");
 const { handleAfkStatus } = require("../handlers/afkHandler");
+const { handleRoleDelayMessage } = require("../handlers/roleDelayHandler");
 
 module.exports = {
     name: "messageCreate",
@@ -8,6 +9,8 @@ module.exports = {
         if (message.author.bot) return;
 
         const prefix = "hwn ";
+
+        if (await handleRoleDelayMessage(message)) return;
 
         await handleAfkStatus(message, prefix);
         await keywordHandler(message);
