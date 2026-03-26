@@ -1,8 +1,10 @@
 const { PermissionFlagsBits } = require("discord.js");
 const { setRoleDelayConfig } = require("../../handlers/roleDelayHandler");
 
-const ROLE_NAME = "36s";
-const DELAY_SECONDS = 36;
+const ROLE_DELAY_MAP = {
+    "36s": 36,
+    "5s": 5
+};
 
 module.exports = {
     name: "create",
@@ -12,8 +14,11 @@ module.exports = {
             return message.reply("Lenh nay chi dung duoc trong server.");
         }
 
-        if (args[0]?.toLowerCase() !== "role" || args[1]?.toLowerCase() !== "36s") {
-            return message.reply("Dung: `hwn create role 36s`");
+        const roleOption = args[0]?.toLowerCase();
+        const roleName = args[1]?.toLowerCase();
+
+        if (roleOption !== "role" || !Object.prototype.hasOwnProperty.call(ROLE_DELAY_MAP, roleName)) {
+            return message.reply("Dung: `hwn create role 36s` hoac `hwn create role 5s`");
         }
 
         if (!message.member.permissions.has(PermissionFlagsBits.ManageRoles)) {
@@ -24,18 +29,19 @@ module.exports = {
             return message.reply("Minh chua co quyen quan ly role trong server nay.");
         }
 
+        const delaySeconds = ROLE_DELAY_MAP[roleName];
         let role = message.guild.roles.cache.find(
-            cachedRole => cachedRole.name.toLowerCase() === ROLE_NAME
+            cachedRole => cachedRole.name.toLowerCase() === roleName
         );
         let created = false;
 
         if (!role) {
             try {
                 role = await message.guild.roles.create({
-                    name: ROLE_NAME,
+                    name: roleName,
                     mentionable: false,
                     hoist: false,
-                    reason: `Tao role delay ${ROLE_NAME} boi ${message.author.tag}`
+                    reason: `Tao role delay ${roleName} boi ${message.author.tag}`
                 });
                 created = true;
             } catch {
@@ -46,17 +52,17 @@ module.exports = {
         await setRoleDelayConfig(message.client, message.guild.id, {
             roleId: role.id,
             roleName: role.name,
-            delaySeconds: DELAY_SECONDS
+            delaySeconds
         });
 
         if (created) {
             return message.reply(
-                `Da tao role **${role.name}** va kich hoat delay chat ${DELAY_SECONDS} giay cho role nay.`
+                `Da tao role **${role.name}** va kich hoat delay chat ${delaySeconds} giay cho role nay.`
             );
         }
 
         return message.reply(
-            `Role **${role.name}** da ton tai. Minh da gan che do delay chat ${DELAY_SECONDS} giay cho role nay.`
+            `Role **${role.name}** da ton tai. Minh da gan che do delay chat ${delaySeconds} giay cho role nay.`
         );
     }
 };

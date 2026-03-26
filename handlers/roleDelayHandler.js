@@ -114,6 +114,22 @@ async function handleRoleDelayMessage(message) {
         return false;
     }
 
+    const isAutoDeleteRole = String(config.roleName || "").toLowerCase() === "5s";
+
+    if (isAutoDeleteRole) {
+        if (message.deletable) {
+            const autoDeleteTimer = setTimeout(() => {
+                message.delete().catch(() => {});
+            }, config.delaySeconds * 1000);
+
+            if (typeof autoDeleteTimer.unref === "function") {
+                autoDeleteTimer.unref();
+            }
+        }
+
+        return false;
+    }
+
     const roleDelayState = getRoleDelayState(message.client);
     const key = `${message.guild.id}:${message.author.id}`;
     const now = Date.now();
@@ -122,6 +138,17 @@ async function handleRoleDelayMessage(message) {
 
     if (now >= nextAllowedAt) {
         roleDelayState.set(key, now);
+
+        if (message.deletable) {
+            const autoDeleteTimer = setTimeout(() => {
+                message.delete().catch(() => {});
+            }, config.delaySeconds * 1000);
+
+            if (typeof autoDeleteTimer.unref === "function") {
+                autoDeleteTimer.unref();
+            }
+        }
+
         return false;
     }
 
