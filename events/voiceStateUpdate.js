@@ -12,22 +12,19 @@ module.exports = {
         if (!oldState.channel && newState.channel) {
             try {
                 await channel.send({
-                    content: `${member} đã tham gia **${channel.name}**`
+                    content: `${member} đã tham gia **${channel.name}**`,
+                    allowedMentions: { parse: [] }
                 });
-            } catch {
-
-            }
+            } catch {}
         }
 
         if (oldState.channel && !newState.channel) {
             try {
                 await channel.send({
                     content: `${member} đã rời khỏi **${channel.name}**`,
-                    allowedMentions: { users: [member.id] }
+                    allowedMentions: { parse: [] }
                 });
-            } catch {
-
-            }
+            } catch {}
         }
     }
 };
